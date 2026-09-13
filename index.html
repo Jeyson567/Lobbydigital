@@ -1,381 +1,1064 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080808">
 
-    <title>Gran Montana</title>
+<title>Gran Montana | Lobby</title>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<style>
+/* =========================================================
+   GRAN MONTANA
+   LOBBY DIGITAL
+   NEGRO / DORADO / BLANCO
+========================================================= */
 
-        html, body {
-            width: 100%;
-            height: 100%;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-                         Roboto, Helvetica, Arial, sans-serif;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        body {
-            background:
-                radial-gradient(circle at top, rgba(255,255,255,0.08), transparent 35%),
-                linear-gradient(145deg, #071b16, #0c2b22 50%, #06120f);
-            color: #fff;
-            overflow: hidden;
-        }
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
 
-        /* CAPA DE LUZ */
-        .light {
-            position: fixed;
-            width: 450px;
-            height: 450px;
-            background: rgba(210, 177, 92, 0.08);
-            filter: blur(100px);
-            border-radius: 50%;
-            top: -180px;
-            right: -120px;
-            pointer-events: none;
-        }
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #050505;
+    color: white;
+    overflow-x: hidden;
+}
 
-        .light2 {
-            position: fixed;
-            width: 350px;
-            height: 350px;
-            background: rgba(255,255,255,0.04);
-            filter: blur(100px);
-            border-radius: 50%;
-            bottom: -180px;
-            left: -120px;
-            pointer-events: none;
-        }
+/* =========================================================
+   FONDO
+========================================================= */
 
-        /* CONTENEDOR PRINCIPAL */
-        .lobby {
-            min-height: 100vh;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 25px;
-            position: relative;
-        }
+.background {
+    position: fixed;
+    inset: 0;
+    z-index: -10;
+    overflow: hidden;
 
-        .container {
-            width: 100%;
-            max-width: 520px;
-            text-align: center;
-            animation: entrance 1s ease forwards;
-        }
+    background:
+        radial-gradient(
+            circle at 50% 15%,
+            rgba(214, 166, 63, 0.12),
+            transparent 34%
+        ),
+        radial-gradient(
+            circle at 10% 90%,
+            rgba(214, 166, 63, 0.06),
+            transparent 30%
+        ),
+        #050505;
+}
 
-        /* LOGO */
-        .logo-box {
-            width: 170px;
-            height: 170px;
-            margin: 0 auto 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
+/* brillo superior */
 
-        .logo-box::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            border-radius: 50%;
-            border: 1px solid rgba(212, 181, 102, 0.35);
-            box-shadow:
-                0 0 35px rgba(212, 181, 102, 0.08),
-                inset 0 0 25px rgba(212, 181, 102, 0.04);
-        }
+.background::before {
+    content: "";
+    position: absolute;
+    width: 700px;
+    height: 700px;
 
-        .logo-box img {
-            width: 145px;
-            height: 145px;
-            object-fit: contain;
-            position: relative;
-            z-index: 2;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.35));
-        }
+    top: -420px;
+    left: 50%;
+    transform: translateX(-50%);
 
-        /* TEXTO */
-        .welcome {
-            font-size: 13px;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: #d4b566;
-            margin-bottom: 9px;
-            font-weight: 500;
-        }
+    border-radius: 50%;
 
-        h1 {
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: clamp(38px, 10vw, 58px);
-            font-weight: 400;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
-        }
+    background: rgba(232, 193, 105, 0.07);
+    filter: blur(90px);
 
-        .subtitle {
-            color: rgba(255,255,255,0.68);
-            font-size: 15px;
-            line-height: 1.6;
-            margin: 0 auto 38px;
-            max-width: 390px;
-        }
+    animation: breathing 6s ease-in-out infinite;
+}
 
-        /* TARJETA */
-        .menu-card {
-            background: rgba(255,255,255,0.055);
-            border: 1px solid rgba(255,255,255,0.10);
-            border-radius: 25px;
-            padding: 20px;
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            box-shadow: 0 25px 60px rgba(0,0,0,0.25);
-        }
+/* línea de luz */
 
-        .card-title {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 2.5px;
-            color: rgba(255,255,255,0.5);
-            margin-bottom: 15px;
-        }
+.light-beam {
+    position: absolute;
 
-        /* BOTONES */
-        .button {
-            width: 100%;
-            min-height: 72px;
-            border-radius: 17px;
-            border: 1px solid rgba(212,181,102,0.35);
-            background: linear-gradient(
-                135deg,
-                rgba(255,255,255,0.09),
-                rgba(255,255,255,0.035)
-            );
-            color: #fff;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            margin-top: 12px;
-            transition:
-                transform 0.25s ease,
-                background 0.25s ease,
-                border-color 0.25s ease,
-                box-shadow 0.25s ease;
-            position: relative;
-            overflow: hidden;
-        }
+    width: 200%;
+    height: 1px;
 
-        .button:first-of-type {
-            margin-top: 0;
-        }
+    left: -50%;
+    top: 30%;
 
-        .button::after {
-            content: "";
-            position: absolute;
-            width: 120px;
-            height: 120px;
-            background: rgba(255,255,255,0.06);
-            border-radius: 50%;
-            right: -70px;
-            top: -45px;
-            transition: 0.35s ease;
-        }
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(232,193,105,0.05),
+        rgba(232,193,105,0.4),
+        rgba(232,193,105,0.05),
+        transparent
+    );
 
-        .button:hover {
-            transform: translateY(-3px);
-            background: rgba(212,181,102,0.12);
-            border-color: rgba(212,181,102,0.65);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.25);
-        }
+    transform: rotate(-14deg);
 
-        .button:hover::after {
-            transform: scale(1.5);
-        }
+    animation: beam 9s linear infinite;
+}
 
-        .icon {
-            width: 43px;
-            height: 43px;
-            border-radius: 13px;
-            background: rgba(212,181,102,0.13);
-            border: 1px solid rgba(212,181,102,0.25);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            font-size: 21px;
-            flex-shrink: 0;
-        }
+/* =========================================================
+   PARTÍCULAS
+========================================================= */
 
-        .button-text {
-            text-align: left;
-            position: relative;
-            z-index: 2;
-        }
+.particles {
+    position: absolute;
+    inset: 0;
+}
 
-        .button-title {
-            display: block;
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 3px;
-        }
+.particle {
+    position: absolute;
 
-        .button-description {
-            display: block;
-            font-size: 12px;
-            color: rgba(255,255,255,0.5);
-        }
+    width: 2px;
+    height: 2px;
 
-        .arrow {
-            margin-left: auto;
-            font-size: 22px;
-            color: #d4b566;
-            position: relative;
-            z-index: 2;
-            transition: transform 0.25s ease;
-        }
+    border-radius: 50%;
 
-        .button:hover .arrow {
-            transform: translateX(5px);
-        }
+    background: #e5bd63;
 
-        /* FOOTER */
-        footer {
-            margin-top: 27px;
-            color: rgba(255,255,255,0.35);
-            font-size: 11px;
-            letter-spacing: 1.5px;
-        }
+    box-shadow:
+        0 0 7px rgba(229,189,99,0.8);
 
-        .gold-line {
-            width: 35px;
-            height: 1px;
-            background: #d4b566;
-            opacity: 0.7;
-            margin: 0 auto 13px;
-        }
+    opacity: 0;
 
-        /* ANIMACIÓN */
-        @keyframes entrance {
-            from {
-                opacity: 0;
-                transform: translateY(25px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    animation: particleFloat linear infinite;
+}
 
-        /* PANTALLAS PEQUEÑAS */
-        @media (max-width: 480px) {
+/* posiciones */
 
-            .lobby {
-                padding: 18px;
-            }
+.p1 { left: 8%;  top: 18%; animation-duration: 7s; }
+.p2 { left: 17%; top: 65%; animation-duration: 10s; animation-delay: 2s; }
+.p3 { left: 28%; top: 32%; animation-duration: 8s; animation-delay: 1s; }
+.p4 { left: 42%; top: 78%; animation-duration: 9s; }
+.p5 { left: 54%; top: 22%; animation-duration: 11s; animation-delay: 3s; }
+.p6 { left: 67%; top: 67%; animation-duration: 8s; }
+.p7 { left: 78%; top: 27%; animation-duration: 10s; animation-delay: 2s; }
+.p8 { left: 88%; top: 73%; animation-duration: 9s; }
+.p9 { left: 94%; top: 40%; animation-duration: 12s; }
+.p10 { left: 35%; top: 12%; animation-duration: 8s; }
 
-            .logo-box {
-                width: 135px;
-                height: 135px;
-                margin-bottom: 20px;
-            }
+/* =========================================================
+   CONTENEDOR
+========================================================= */
 
-            .logo-box img {
-                width: 115px;
-                height: 115px;
-            }
+.lobby {
+    min-height: 100vh;
 
-            .welcome {
-                font-size: 11px;
-                letter-spacing: 3px;
-            }
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-            h1 {
-                font-size: 40px;
-            }
+    padding: 35px 20px;
+}
 
-            .subtitle {
-                font-size: 14px;
-                margin-bottom: 28px;
-            }
+.container {
+    width: 100%;
+    max-width: 560px;
 
-            .menu-card {
-                padding: 15px;
-                border-radius: 21px;
-            }
+    text-align: center;
 
-            .button {
-                min-height: 68px;
-            }
-        }
+    animation: pageEnter 1.4s cubic-bezier(.16,1,.3,1);
+}
 
-        /* REDUCE ANIMACIONES SI EL USUARIO LO PREFIERE */
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation: none !important;
-                transition: none !important;
-            }
-        }
-    </style>
+/* =========================================================
+   LOGO
+========================================================= */
+
+.logo-wrapper {
+    position: relative;
+
+    width: 245px;
+    height: 245px;
+
+    margin: 0 auto 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* halo */
+
+.logo-wrapper::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 12px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(222,181,91,0.25);
+
+    box-shadow:
+        0 0 25px rgba(222,181,91,0.06),
+        inset 0 0 30px rgba(222,181,91,0.04);
+
+    animation: logoRing 5s ease-in-out infinite;
+}
+
+/* segundo aro */
+
+.logo-wrapper::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(222,181,91,0.07);
+
+    transform: scale(.9);
+
+    animation: ringRotate 15s linear infinite;
+}
+
+/* logo */
+
+.logo {
+    width: 225px;
+    height: 225px;
+
+    object-fit: contain;
+
+    position: relative;
+    z-index: 3;
+
+    filter:
+        drop-shadow(0 10px 25px rgba(0,0,0,.7))
+        drop-shadow(0 0 18px rgba(218,177,82,.12));
+
+    animation: logoFloat 5s ease-in-out infinite;
+}
+
+/* =========================================================
+   TITULO
+========================================================= */
+
+.welcome {
+    font-size: 10px;
+    letter-spacing: 5px;
+
+    color: #d8b565;
+
+    text-transform: uppercase;
+
+    margin-bottom: 12px;
+
+    opacity: 0;
+
+    animation: fadeUp .9s ease forwards;
+    animation-delay: .5s;
+}
+
+.title {
+    font-family: Georgia, "Times New Roman", serif;
+
+    font-size: clamp(34px, 9vw, 50px);
+
+    font-weight: normal;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 10px;
+
+    background: linear-gradient(
+        90deg,
+        #b9852d,
+        #f4d98b,
+        #ffffff,
+        #e2b957,
+        #a87424
+    );
+
+    background-size: 250% auto;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    color: transparent;
+
+    animation:
+        titleReveal 1s ease forwards,
+        goldMove 6s linear infinite;
+
+    animation-delay: .7s, 1.7s;
+
+    opacity: 0;
+}
+
+.subtitle {
+    max-width: 390px;
+
+    margin: 0 auto;
+
+    color: rgba(255,255,255,.58);
+
+    font-size: 14px;
+
+    line-height: 1.7;
+
+    opacity: 0;
+
+    animation: fadeUp .9s ease forwards;
+    animation-delay: .9s;
+}
+
+/* =========================================================
+   LOBBY CARD
+========================================================= */
+
+.lobby-card {
+    margin-top: 32px;
+
+    padding: 22px;
+
+    border-radius: 28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.075),
+            rgba(255,255,255,.025)
+        );
+
+    border: 1px solid rgba(218,177,82,.18);
+
+    box-shadow:
+        0 30px 70px rgba(0,0,0,.55),
+        inset 0 1px rgba(255,255,255,.05);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    opacity: 0;
+
+    animation: cardEnter 1s cubic-bezier(.16,1,.3,1) forwards;
+
+    animation-delay: 1.05s;
+}
+
+.lobby-label {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    margin-bottom: 18px;
+
+    color: rgba(255,255,255,.42);
+
+    font-size: 9px;
+
+    letter-spacing: 3px;
+
+    text-transform: uppercase;
+}
+
+.lobby-label::before,
+.lobby-label::after {
+    content: "";
+
+    width: 35px;
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(218,177,82,.7)
+        );
+}
+
+.lobby-label::after {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(218,177,82,.7),
+            transparent
+        );
+}
+
+/* =========================================================
+   BOTONES
+========================================================= */
+
+.buttons {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 13px;
+}
+
+.button {
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    width: 100%;
+    min-height: 82px;
+
+    padding: 13px 18px;
+
+    border-radius: 19px;
+
+    overflow: hidden;
+
+    text-decoration: none;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            110deg,
+            rgba(255,255,255,.075),
+            rgba(255,255,255,.025)
+        );
+
+    border: 1px solid rgba(218,177,82,.22);
+
+    box-shadow:
+        inset 0 1px rgba(255,255,255,.04);
+
+    transition:
+        transform .35s cubic-bezier(.16,1,.3,1),
+        border-color .35s ease,
+        box-shadow .35s ease,
+        background .35s ease;
+
+    opacity: 0;
+
+    animation: buttonEnter .8s cubic-bezier(.16,1,.3,1) forwards;
+}
+
+.button:nth-child(1) {
+    animation-delay: 1.25s;
+}
+
+.button:nth-child(2) {
+    animation-delay: 1.4s;
+}
+
+/* brillo que atraviesa */
+
+.button::before {
+    content: "";
+
+    position: absolute;
+
+    width: 80px;
+    height: 180%;
+
+    top: -40%;
+
+    left: -130px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.18),
+            transparent
+        );
+
+    transform: rotate(18deg);
+
+    transition: left .8s ease;
+}
+
+.button:hover::before {
+    left: 120%;
+}
+
+/* borde luminoso */
+
+.button::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    border-radius: inherit;
+
+    border: 1px solid transparent;
+
+    background:
+        linear-gradient(
+            120deg,
+            rgba(239,199,105,.4),
+            transparent 35%,
+            transparent 65%,
+            rgba(239,199,105,.25)
+        ) border-box;
+
+    -webkit-mask:
+        linear-gradient(#fff 0 0) padding-box,
+        linear-gradient(#fff 0 0);
+
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+
+    pointer-events: none;
+
+    opacity: .45;
+}
+
+/* hover */
+
+.button:hover {
+    transform: translateY(-5px) scale(1.015);
+
+    border-color: rgba(232,193,105,.65);
+
+    background:
+        linear-gradient(
+            110deg,
+            rgba(218,177,82,.14),
+            rgba(255,255,255,.045)
+        );
+
+    box-shadow:
+        0 15px 35px rgba(0,0,0,.45),
+        0 0 25px rgba(218,177,82,.08);
+}
+
+/* icono */
+
+.button-icon {
+    width: 50px;
+    height: 50px;
+
+    flex-shrink: 0;
+
+    border-radius: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(226,185,91,.18),
+            rgba(226,185,91,.04)
+        );
+
+    border: 1px solid rgba(226,185,91,.28);
+
+    margin-right: 15px;
+
+    position: relative;
+    z-index: 2;
+
+    transition:
+        transform .35s ease,
+        box-shadow .35s ease;
+}
+
+.button:hover .button-icon {
+    transform: rotate(-5deg) scale(1.08);
+
+    box-shadow:
+        0 0 20px rgba(226,185,91,.14);
+}
+
+/* iconos */
+
+.web-icon {
+    width: 20px;
+    height: 20px;
+
+    border: 1.5px solid #e1ba5d;
+
+    border-radius: 50%;
+
+    position: relative;
+}
+
+.web-icon::before {
+    content: "";
+
+    position: absolute;
+
+    width: 8px;
+    height: 18px;
+
+    left: 4px;
+    top: -1px;
+
+    border-left: 1px solid #e1ba5d;
+    border-right: 1px solid #e1ba5d;
+
+    border-radius: 50%;
+}
+
+.web-icon::after {
+    content: "";
+
+    position: absolute;
+
+    left: 1px;
+    right: 1px;
+    top: 8px;
+
+    height: 1px;
+
+    background: #e1ba5d;
+}
+
+/* icono menu */
+
+.menu-icon {
+    width: 22px;
+    height: 16px;
+
+    position: relative;
+}
+
+.menu-icon span {
+    display: block;
+
+    height: 1.5px;
+
+    margin-bottom: 5px;
+
+    background: #e1ba5d;
+
+    border-radius: 10px;
+}
+
+.button-content {
+    text-align: left;
+
+    position: relative;
+
+    z-index: 2;
+}
+
+.button-title {
+    display: block;
+
+    font-family: Georgia, "Times New Roman", serif;
+
+    font-size: 18px;
+
+    letter-spacing: .5px;
+
+    margin-bottom: 5px;
+}
+
+.button-description {
+    display: block;
+
+    color: rgba(255,255,255,.43);
+
+    font-size: 11px;
+
+    letter-spacing: .2px;
+}
+
+.arrow {
+    margin-left: auto;
+
+    position: relative;
+    z-index: 2;
+
+    color: #dcb55e;
+
+    font-size: 25px;
+
+    transition:
+        transform .35s ease,
+        color .35s ease;
+}
+
+.button:hover .arrow {
+    transform: translateX(6px);
+
+    color: #f2d487;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer {
+    margin-top: 25px;
+
+    color: rgba(255,255,255,.28);
+
+    font-size: 8px;
+
+    letter-spacing: 3px;
+
+    text-transform: uppercase;
+
+    opacity: 0;
+
+    animation: fadeUp .8s ease forwards;
+
+    animation-delay: 1.6s;
+}
+
+.footer-line {
+    width: 45px;
+    height: 1px;
+
+    margin: 0 auto 12px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #c69b43,
+            transparent
+        );
+}
+
+/* =========================================================
+   ANIMACIONES
+========================================================= */
+
+@keyframes pageEnter {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes logoFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-7px);
+    }
+}
+
+@keyframes logoRing {
+    0%, 100% {
+        transform: scale(1);
+        opacity: .45;
+    }
+
+    50% {
+        transform: scale(1.04);
+        opacity: .9;
+    }
+}
+
+@keyframes ringRotate {
+    from {
+        transform: rotate(0deg) scale(.9);
+    }
+
+    to {
+        transform: rotate(360deg) scale(.9);
+    }
+}
+
+@keyframes breathing {
+    0%, 100% {
+        opacity: .5;
+        transform: translateX(-50%) scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1.2);
+    }
+}
+
+@keyframes beam {
+    0% {
+        transform: translateX(-30%) rotate(-14deg);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    80% {
+        opacity: .5;
+    }
+
+    100% {
+        transform: translateX(30%) rotate(-14deg);
+        opacity: 0;
+    }
+}
+
+@keyframes particleFloat {
+    0% {
+        transform: translateY(30px) scale(.4);
+        opacity: 0;
+    }
+
+    25% {
+        opacity: .8;
+    }
+
+    75% {
+        opacity: .35;
+    }
+
+    100% {
+        transform: translateY(-80px) scale(1);
+        opacity: 0;
+    }
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes titleReveal {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes goldMove {
+    0% {
+        background-position: 0% center;
+    }
+
+    100% {
+        background-position: 250% center;
+    }
+}
+
+@keyframes cardEnter {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes buttonEnter {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* =========================================================
+   CELULAR
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .lobby {
+        padding: 24px 16px;
+    }
+
+    .logo-wrapper {
+        width: 205px;
+        height: 205px;
+
+        margin-bottom: 15px;
+    }
+
+    .logo {
+        width: 190px;
+        height: 190px;
+    }
+
+    .welcome {
+        font-size: 8px;
+        letter-spacing: 4px;
+    }
+
+    .title {
+        font-size: 35px;
+        letter-spacing: 2px;
+    }
+
+    .subtitle {
+        font-size: 12px;
+        max-width: 320px;
+    }
+
+    .lobby-card {
+        margin-top: 25px;
+        padding: 15px;
+        border-radius: 23px;
+    }
+
+    .button {
+        min-height: 76px;
+        padding: 11px 14px;
+    }
+
+    .button-icon {
+        width: 45px;
+        height: 45px;
+
+        margin-right: 12px;
+    }
+
+    .button-title {
+        font-size: 16px;
+    }
+
+    .button-description {
+        font-size: 10px;
+    }
+}
+
+/* =========================================================
+   ACCESIBILIDAD
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+</style>
 </head>
 
 <body>
 
-    <div class="light"></div>
-    <div class="light2"></div>
+<!-- =======================================================
+     FONDO ANIMADO
+======================================================= -->
 
-    <main class="lobby">
+<div class="background">
 
-        <div class="container">
+    <div class="light-beam"></div>
 
-            <!-- LOGO -->
-            <div class="logo-box">
-                <img
-                    src="8A0B2565-202D-46B1-95F3-A6BEAEA9CD47.png"
-                    alt="Gran Montana"
-                >
+    <div class="particles">
+
+        <span class="particle p1"></span>
+        <span class="particle p2"></span>
+        <span class="particle p3"></span>
+        <span class="particle p4"></span>
+        <span class="particle p5"></span>
+        <span class="particle p6"></span>
+        <span class="particle p7"></span>
+        <span class="particle p8"></span>
+        <span class="particle p9"></span>
+        <span class="particle p10"></span>
+
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     LOBBY
+======================================================= -->
+
+<main class="lobby">
+
+    <div class="container">
+
+        <!-- LOGO -->
+
+        <div class="logo-wrapper">
+
+            <img
+                class="logo"
+                src="8A0B2565-202D-46B1-95F3-A6BEAEA9CD47.png"
+                alt="Gran Montana"
+            >
+
+        </div>
+
+
+        <!-- TITULO -->
+
+        <div class="welcome">
+            Bienvenido
+        </div>
+
+        <h1 class="title">
+            Gran Montana
+        </h1>
+
+        <p class="subtitle">
+            Hotel y Restaurante
+        </p>
+
+
+        <!-- LOBBY DIGITAL -->
+
+        <section class="lobby-card">
+
+            <div class="lobby-label">
+                Lobby Digital
             </div>
 
-            <!-- ENCABEZADO -->
-            <div class="welcome">
-                Bienvenido
-            </div>
 
-            <h1>Gran Montana</h1>
+            <div class="buttons">
 
-            <p class="subtitle">
-                Descubre nuestra experiencia, conoce más sobre nosotros
-                o consulta nuestro menú.
-            </p>
+                <!-- PAGINA WEB -->
 
-            <!-- LOBBY -->
-            <section class="menu-card">
-
-                <div class="card-title">
-                    Lobby Digital
-                </div>
-
-                <!-- PÁGINA WEB -->
                 <a
                     class="button"
                     href="https://granmontana.com"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-                    <div class="icon">
-                        ◉
+
+                    <div class="button-icon">
+
+                        <div class="web-icon"></div>
+
                     </div>
 
-                    <div class="button-text">
+                    <div class="button-content">
+
                         <span class="button-title">
                             Página Web
                         </span>
@@ -383,67 +1066,141 @@
                         <span class="button-description">
                             Conoce Gran Montana
                         </span>
+
                     </div>
 
                     <div class="arrow">
-                        →
+                        ›
                     </div>
+
                 </a>
 
-                <!-- MENÚ -->
+
+                <!-- MENU -->
+
                 <a
                     class="button"
                     href="https://menumontana.wordpress.com"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-                    <div class="icon">
-                        ☰
+
+                    <div class="button-icon">
+
+                        <div class="menu-icon">
+
+                            <span></span>
+                            <span></span>
+                            <span></span>
+
+                        </div>
+
                     </div>
 
-                    <div class="button-text">
+                    <div class="button-content">
+
                         <span class="button-title">
-                            Nuestro Menú
+                            Menú
                         </span>
 
                         <span class="button-description">
                             Consulta nuestro menú digital
                         </span>
+
                     </div>
 
                     <div class="arrow">
-                        →
+                        ›
                     </div>
+
                 </a>
 
-            </section>
+            </div>
 
-            <!-- PIE -->
-            <footer>
-                <div class="gold-line"></div>
-                GRAN MONTANA
-            </footer>
+        </section>
 
-        </div>
 
-    </main>
+        <!-- FOOTER -->
 
-    <script>
-        // Pequeño efecto de interacción al tocar los botones
-        document.querySelectorAll(".button").forEach(button => {
+        <footer class="footer">
 
-            button.addEventListener("click", function() {
+            <div class="footer-line"></div>
 
-                this.style.transform = "scale(0.98)";
+            Una experiencia Gran Montana
 
-                setTimeout(() => {
-                    this.style.transform = "";
-                }, 120);
+        </footer>
 
-            });
+    </div>
 
-        });
-    </script>
+</main>
+
+
+<!-- =======================================================
+     JAVASCRIPT
+======================================================= -->
+
+<script>
+
+/*
+    Efecto de presión al tocar los botones
+*/
+
+const buttons = document.querySelectorAll(".button");
+
+buttons.forEach(button => {
+
+    button.addEventListener("touchstart", () => {
+
+        button.style.transform = "scale(.97)";
+
+    });
+
+    button.addEventListener("touchend", () => {
+
+        setTimeout(() => {
+
+            button.style.transform = "";
+
+        }, 100);
+
+    });
+
+});
+
+
+/*
+    Movimiento muy suave del fondo
+*/
+
+document.addEventListener("mousemove", (event) => {
+
+    const x = (event.clientX / window.innerWidth - .5) * 10;
+    const y = (event.clientY / window.innerHeight - .5) * 10;
+
+    const logo = document.querySelector(".logo");
+
+    if (window.innerWidth > 700) {
+
+        logo.style.transform =
+            `translate(${x * .15}px, ${y * .15}px)`;
+
+    }
+
+});
+
+
+/*
+    Al regresar de otra página,
+    la pantalla vuelve a aparecer suavemente.
+*/
+
+window.addEventListener("pageshow", () => {
+
+    document.body.style.opacity = "1";
+
+});
+
+</script>
 
 </body>
 </html>
